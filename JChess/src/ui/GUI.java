@@ -18,6 +18,11 @@ public class GUI {
     private JPanel chessPanel;
     private JButton[][] chessButtons;
     private Logic logic;
+    
+    private JFrame victoryFrame;
+    private JPanel victoryPanel;
+    private JLabel victoryLabel;
+    private JButton victoryButton;
 
     public GUI(Logic logic) {
     	this.logic = logic;
@@ -81,6 +86,7 @@ public class GUI {
     	// Turn all buttons green.
     	for (Coord move : logic.currentMoves) {
     		chessButtons[move.x][move.y].setBackground(Color.GREEN);
+    		chessButtons[move.x][move.y].setOpaque(true);
     	}
     }
     
@@ -91,6 +97,46 @@ public class GUI {
     	for (Coord move : logic.currentMoves) {
     		chessButtons[move.x][move.y].setBackground(null);
     	}
+    }
+    
+    
+    // Called if black gets check mate.
+    public void blackVictory() {
+    	gameFrame.setVisible(false);
+    	
+    	victoryFrame = new JFrame("Game over");
+    	victoryPanel = new JPanel();
+    	victoryPanel.setLayout(new GridLayout(2, 1));
+    	victoryLabel = new JLabel("Black has won, game over.");
+    	victoryPanel.add(victoryLabel);
+    	victoryButton = new JButton("Exit");
+    	victoryButton.addActionListener(e -> {
+    		victoryFrame.setVisible(false);
+    	});
+    	victoryPanel.add(victoryButton);
+    	victoryFrame.getContentPane().add(victoryPanel, BorderLayout.CENTER);
+    	victoryFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    	victoryFrame.setVisible(true);
+    }
+    
+    
+    // Called if white gets check mate.
+    public void whiteVictory() {
+    	gameFrame.setVisible(false);
+    	
+    	victoryFrame = new JFrame("Game over");
+    	victoryPanel = new JPanel();
+    	victoryPanel.setLayout(new GridLayout(2, 1));
+    	victoryLabel = new JLabel("White has won, congratulations!");
+    	victoryPanel.add(victoryLabel);
+    	victoryButton = new JButton("Exit");
+    	victoryButton.addActionListener(e -> {
+    		victoryFrame.setVisible(false);
+    	});
+    	victoryPanel.add(victoryButton);
+    	victoryFrame.getContentPane().add(victoryPanel, BorderLayout.CENTER);
+    	victoryFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    	victoryFrame.setVisible(true);
     }
     
 

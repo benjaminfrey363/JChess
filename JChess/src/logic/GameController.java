@@ -6,7 +6,7 @@ public class GameController {
 	
 	// Play a game of chess.
 	public static void playGame() {
-		// Creat new logic, thus creating and displaying UI.
+		// Create new logic, thus creating and displaying UI.
 		logic = new Logic();
 		
 	}
