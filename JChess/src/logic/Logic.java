@@ -12,6 +12,9 @@ public class Logic {
 	public class Coord {
 		public int x; public int y;
 		public Coord(int x, int y) {this.x = x; this.y = y;}
+		public boolean equals(Coord c) {
+			return (c.x == this.x && c.y == this.y);
+		}
 	}
 	
 	public static char OPPCOL = 'B';
@@ -82,7 +85,9 @@ public class Logic {
 					if (move.x == x && move.y == y) {
 						// Piece is moved to x, y. Check for a check mate.
 						movePiece(currentPiece, x, y);
-						checkForCheckmate(currentPiece);
+
+						checkForCheckmate();
+						
 						if (whiteWon == true) gui.whiteVictory();
 						else {
 							// Change turn.
@@ -384,6 +389,60 @@ public class Logic {
 					blackWon = true;
 					// Implement full check mate system later.
 				}
+			}
+		}
+	}
+	
+	
+	// Need a more versatile method to check for check mate. This method takes no parameters,
+	// examines entire board to see if either king is in danger and cannot respond.
+	//
+	// Indicates if there is a check mate by setting win flags accordingly.
+	private void checkForCheckmate() {
+		// Check all possible moves which can be made by all possible pieces.
+		for (Piece p : pieceMap.values()) {
+			ArrayList<Coord> options = moveOptions(p);
+			for (Coord move : options) {
+				if (gameBoard.boardArray[move.x][move.y] != null && gameBoard.boardArray[move.x][move.y].tag.charAt(1) == 'K'
+					&& gameBoard.boardArray[move.x][move.y].tag.charAt(0) != p.tag.charAt(0)) {
+						// If a move coincides with enemy king, then enemy king is in danger!
+						Piece king = gameBoard.boardArray[move.x][move.y];
+						ArrayList<Coord> kingOptions = moveOptions(king);
+						
+						// We now have to see if any enemies can counter these moves by the king.
+						// To do this, we'll consider all possible enemy moves, and see if any
+						// possible enemy move coincides with these king options. If a collision is
+						// found, move option from array.
+						
+						ArrayList<Coord> counters = new ArrayList<Coord>();
+						
+						for (Piece piece : pieceMap.values()) {
+							if (piece.tag.charAt(0) != king.tag.charAt(0)) {
+								// Only consider pieces not on the kings team.
+								counters = moveOptions(piece);
+								for (Coord counter : counters) {
+									for (Coord option : kingOptions) {
+										// If a counter collides with an option, remove this option.
+										if (option.equals(counter)) {
+											options.remove(option);
+											break;
+										}
+									}
+								}
+							}
+						}
+						
+						// If kingOptions is now null, then all options have been removed and we have mate.
+						if (kingOptions.size() == 0) {
+							if (king.tag.charAt(0) == 'W') {
+								// Black mate
+								blackWon = true;
+							} else {
+								// White mate
+								whiteWon = true;
+							}
+						}
+					}
 			}
 		}
 	}
