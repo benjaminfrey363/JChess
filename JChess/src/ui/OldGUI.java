@@ -7,32 +7,32 @@ import java.awt.event.ActionListener;
 import java.awt.BorderLayout;
 import java.awt.Color;
 
-import logic.Board;
-import logic.Logic;
-import logic.Logic.Coord;
-import logic.Piece;
+import logic.OldBoard;
+import logic.OldLogic;
+import universal.Coord;
+import logic.OldPiece;
 
-public class GUI {
-    private Board gameBoard;
+public class OldGUI {
+    private OldBoard gameBoard;
     private JFrame gameFrame;
     private JPanel chessPanel;
     private JButton[][] chessButtons;
-    private Logic logic;
+    private OldLogic logic;
     
     private JFrame victoryFrame;
     private JPanel victoryPanel;
     private JLabel victoryLabel;
     private JButton victoryButton;
 
-    public GUI(Logic logic) {
+    public OldGUI(OldLogic logic) {
     	this.logic = logic;
         gameBoard = logic.gameBoard;
         gameFrame = new JFrame("Chess");
         chessPanel = new JPanel();
-        chessPanel.setLayout(new GridLayout(Board.DIM,Board.DIM));
-        chessButtons = new JButton[Board.DIM][Board.DIM];
-        for (int i = 0; i < Board.DIM; ++i) {
-            for (int j = 0; j < Board.DIM; ++j) {
+        chessPanel.setLayout(new GridLayout(OldBoard.DIM,OldBoard.DIM));
+        chessButtons = new JButton[OldBoard.DIM][OldBoard.DIM];
+        for (int i = 0; i < OldBoard.DIM; ++i) {
+            for (int j = 0; j < OldBoard.DIM; ++j) {
             	chessButtons[i][j] = new JButton();
                 chessPanel.add(chessButtons[i][j]);
                 BoardButtonListener listener = new BoardButtonListener(i, j);
@@ -69,8 +69,8 @@ public class GUI {
     
     // Updates button text according to current board placement.
     public void updateBoard() {
-    	for (int i = 0; i < Board.DIM; ++i) {
-    		for (int j = 0; j < Board.DIM; ++j) {
+    	for (int i = 0; i < OldBoard.DIM; ++i) {
+    		for (int j = 0; j < OldBoard.DIM; ++j) {
     			if (gameBoard.boardArray[i][j] != null) {
     				chessButtons[i][j].setText(gameBoard.boardArray[i][j].tag);
     			} else {
